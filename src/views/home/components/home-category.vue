@@ -1,15 +1,25 @@
 <template>
-  <div class="home-category" @mouseleave="categoryId=null">
+  <div class="home-category" @mouseleave="categoryId = null">
     <ul class="menu">
       <li
         :class="{ active: categoryId === item.id }"
         v-for="item in menuList"
         :key="item.id"
-        @click="categoryId = item.id"
+        @mouseenter="categoryId = item.id"
       >
-        <RouterLink to="/">居家</RouterLink>
-        <RouterLink to="/">洗漱</RouterLink>
-        <RouterLink to="/">清洁</RouterLink>
+        <RouterLink to="/">{{ item.name }}</RouterLink>
+        <template v-if="item.children">
+          <RouterLink to="/" v-for="sub in item.children" :key="sub.id">{{ sub.name }}</RouterLink>
+        </template>
+        <span v-else>
+          <XtxSkeleton
+            width="60px"
+            height="18px"
+            style="margin-right: 5px"
+            bg="rgba(255,255,255,0.2)"
+          />
+          <XtxSkeleton width="50px" height="18px" bg="rgba(255,255,255,0.2)" />
+        </span>
       </li>
     </ul>
     <!-- 弹层 -->
@@ -212,6 +222,17 @@ export default {
   &:hover {
     .layer {
       display: block;
+    }
+  }
+  .xtx-skeleton {
+    animation: fade 1s linear infinite alternate;
+  }
+  @keyframes fade {
+    from {
+      opacity: 0.2;
+    }
+    to {
+      opacity: 1;
     }
   }
 }
