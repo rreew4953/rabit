@@ -1,18 +1,28 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from 'vue-router';
+import topCategory from '@/views/category/index.vue';
+import subCategory from '@/views/category/sub.vue';
 
-const Layout = () => import("@/views/Layout.vue");
-const Home = () => import("@/views/home/index.vue");
+const Layout = () => import('@/views/Layout.vue');
+const Home = () => import('@/views/home/index.vue');
 
 //  路由规则
 const routes = [
   //  一级路由布局容器
   {
-    path: "/",
+    path: '/',
     component: Layout,
     children: [
       {
-        path: "/",
+        path: '/',
         component: Home,
+      },
+      {
+        path: '/category/:id',
+        component: topCategory,
+      },
+      {
+        path: '/category/sub/:id',
+        component: subCategory,
       },
     ],
   },
@@ -26,7 +36,7 @@ const router = createRouter({
 
 export default router;
 
-/* 
+/*
   创建路由
   vue 2.0  new VueRouter({})
   vue 3.0  createRouter({})

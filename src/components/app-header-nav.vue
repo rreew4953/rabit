@@ -1,18 +1,17 @@
 <template>
   <ul class="app-header-nav">
-    <li class="home"><RouterLink to="/">首页</RouterLink></li>
-    <li>
-      <a href="#">美食</a>
-      <div class="layer">
+    <li class="home">
+      <RouterLink to="/">{{ $store.state.category.list }} </RouterLink>
+    </li>
+    <li v-for="item in list" :key="item.id" @mouseenter="show(item)" @mouseleave="hide(item)">
+      <RouterLink :to="`/category/${item.id}`" @click="hide(item)">{{ item.name }} </RouterLink>
+      <div class="layer" :class="{open: item.open} ">
         <ul>
-          <li v-for="i in 10" :key="i">
-            <a href="#">
-              <img
-                src="http://zhoushugang.gitee.io/erabbit-client-pc-static/uploads/img/category%20(4).png"
-                alt=""
-              />
-              <p>果干</p>
-            </a>
+          <li v-for="sub in item.children" :key="sub.id">
+            <RouterLink :to="`/category/sub/${sub.id}`" @click="hide(item)">
+              <img :src="sub.picture" alt="" />
+              <p>{{ sub.name }}</p>
+            </RouterLink>
           </li>
         </ul>
       </div>
@@ -29,8 +28,26 @@
 </template>
 
 <script>
+import useStore from 'vuex';
+import { computed } from 'vue';
 export default {
   name: 'AppHeaderNav',
+  setup() {
+    const store = useStore();
+    const list = computed(() => {
+      return store.state.category.list;
+    });
+    //  跳转不关闭二级类目 通过数据来控制
+    //  vuex 每个分类加上open 并通过 show 和 hide 控制
+    //  组件中使用 vuex 的函数 使用时间来绑定，提供一个类名显示隐藏
+    const show = item => {
+      store.commit('category/show', item);
+    };
+    const hide = item => {
+      store.commit('category/hide', item);
+    };
+    return { list, show, hide };
+  },
 };
 </script>
 
@@ -59,15 +76,19 @@ export default {
         border-bottom: 1px solid @xtxColor;
       }
       //  二级类名类目
-      > .layer {
-        height: 132px;
-        opacity: 1;
-      }
+      // > .layer {
+      //   height: 132px;
+      //   opacity: 1;
+      // }
     }
   }
 }
 //  二级类名弹层
 .layer {
+  &.open {
+    height: 132px;
+    opacity: 1;
+  }
   width: 1240px;
   background-color: #fff;
   position: absolute;

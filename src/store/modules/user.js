@@ -6,12 +6,12 @@ export default {
     return {
       //  用户信息
       profile: {
-        id: "",
-        avatar: "",
-        nickname: "",
-        account: "",
-        mobile: "",
-        token: "",
+        id: '',
+        avatar: '',
+        nickname: '',
+        account: '',
+        mobile: '',
+        token: '',
       },
     };
   },
