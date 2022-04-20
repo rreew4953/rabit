@@ -8,7 +8,7 @@ import 'normalize.css';
 import '@/assets/styles/common.less';
 
 //  引入 自己的插件
-import ui from './components/library';
+import ui from './components/library/index-1';
 
 // 插件的使用，在main.js使用app.use(插件)
 createApp(App).use(store).use(router).use(ui).mount('#app');

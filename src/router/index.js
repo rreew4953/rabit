@@ -32,6 +32,9 @@ const router = createRouter({
   //  使用路由模式  哈希  改成历史模式需要 导入
   history: createWebHashHistory(),
   routes,
+  scrollBehavior() {
+    return { left: 0, top: 0 };
+  },
 });
 
 export default router;

@@ -3,7 +3,7 @@
     <li class="home">
       <RouterLink to="/">{{ $store.state.category.list }} </RouterLink>
     </li>
-    <li v-for="item in list" :key="item.id" @mouseenter="show(item)" @mouseleave="hide(item)">
+    <li v-for="item in list" :key="item.id" @mousemove="show(item)" @mouseleave="hide(item)">
       <RouterLink :to="`/category/${item.id}`" @click="hide(item)">{{ item.name }} </RouterLink>
       <div class="layer" :class="{open: item.open} ">
         <ul>

@@ -3,27 +3,29 @@
 // vue2.0插件写法要素：导出一个对象，有install函数，默认传入了Vue构造函数，Vue基础之上扩展
 // vue3.0插件写法要素：导出一个对象，有install函数，默认传入了app应用实例，app基础之上扩展
 
-// 导入library文件夹下的所有组件
-// 批量导入需要使用一个函数 require.context(dir,deep,matching)
-// 参数：1. 目录  2. 是否加载子目录  3. 加载的正则匹配
+import XtxSkeleton from './xtx-skeleton.vue';
+import XtxCarousel from './xtx-carousel.vue';
+import XtxMore from './xtx-more.vue';
+import defaultImg from '@/assets/images/200.png';
+import XtxBread from './xtx-bread.vue';
+import XtxBreadItem from './xtx-bread-item.vue';
 
-const importFn = require.context('./', false, /\.vue$/);
-// console.dir(importFn.keys())  文件名数组
+/**
+ * 创建观察对象实例
+@const observer = new IntersectionObserver(callback, [options]);
+@callback 被观察dom进入可视区离开可视区都会触发
+两个回调参数 @entries , @observer
+@entries 被观察的元素信息对象的数组 [{元素信息},{}]，信息中isIntersecting判断进入或离开
+@observer 就是观察实例
+@options 配置参数 三个配置属性 root rootMargin threshold
+@root 基于的滚动容器，默认是document
+@rootMargin 容器有没有外边距
+@threshold 交叉的比例
 
-export default {
-  install(app) {
-    //  批量注册全局组件
-    importFn.keys().forEach(key => {
-      //  导入组件
-      //  console.dir(importFn.keys())  文件名数组.default 拿到的就是 一个个 export default 的数组
-      const component = importFn(key).default;
-      //  注册组件
-      app.component(component.name, component);
-    });
-    //  定义指令
-    defineDirective(app);
-  },
-};
+@实例提供两个方法
+@observe(dom) 观察哪个dom
+@unobserve(dom) 停止观察那个dom
+ */
 
 const defineDirective = app => {
   //  1、图片懒加载指令 v-lazy
@@ -56,19 +58,15 @@ const defineDirective = app => {
   });
 };
 
-/**
- * 创建观察对象实例
-@const observer = new IntersectionObserver(callback, [options]);
-@callback 被观察dom进入可视区离开可视区都会触发
-两个回调参数 @entries , @observer
-@entries 被观察的元素信息对象的数组 [{元素信息},{}]，信息中isIntersecting判断进入或离开
-@observer 就是观察实例
-@options 配置参数 三个配置属性 root rootMargin threshold
-@root 基于的滚动容器，默认是document
-@rootMargin 容器有没有外边距
-@threshold 交叉的比例
-
-@实例提供两个方法
-@observe(dom) 观察哪个dom
-@unobserve(dom) 停止观察那个dom
- */
+export default {
+  install(app) {
+    // 在app上进行扩展，app提供 component directive 函数
+    // 如果要挂载原型 app.config.globalProperties 方式
+    app.component(XtxSkeleton.name, XtxSkeleton);
+    app.component(XtxCarousel.name, XtxCarousel);
+    app.component(XtxMore.name, XtxMore);
+    app.component(XtxBread.name, XtxBread);
+    app.component(XtxBreadItem.name, XtxBreadItem);
+    defineDirective(app);
+  },
+};
