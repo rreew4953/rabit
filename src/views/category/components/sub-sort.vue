@@ -38,8 +38,10 @@
       </a>
     </div>
     <div class="check">
-      <XtxCheckbox v-model="sortParams.inventory">仅显示有货商品</XtxCheckbox>
-      <XtxCheckbox v-model="sortParams.onlyDiscount">仅显示特惠商品</XtxCheckbox>
+      <XtxCheckbox @change="changeCheck" v-model="sortParams.inventory">仅显示有货商品</XtxCheckbox>
+      <XtxCheckbox @change="changeCheck" v-model="sortParams.onlyDiscount"
+        >仅显示特惠商品</XtxCheckbox
+      >
     </div>
   </div>
 </template>
@@ -56,7 +58,7 @@ export default {
     const sortParams = reactive({
       inventory: false,
       onlyDiscount: false,
-      sortField: null, 
+      sortField: null,
       sortMethod: null,
     });
 
@@ -77,6 +79,11 @@ export default {
         sortParams.sortField === sortField;
         sortParams.sortMethod = null;
       }
+      emit('sort-change', sortParams);
+    };
+    //  传参
+    const changeCheck = sortField => {
+      emit('sort-change', sortParams);
     };
 
     return { sortParams, changeSort };

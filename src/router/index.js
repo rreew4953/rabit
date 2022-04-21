@@ -4,6 +4,9 @@ import subCategory from '@/views/category/sub.vue';
 
 const Layout = () => import('@/views/Layout.vue');
 const Home = () => import('@/views/home/index.vue');
+const Goods = () => {
+  import('@/views/goods/index.vue');
+};
 
 //  路由规则
 const routes = [
@@ -23,6 +26,10 @@ const routes = [
       {
         path: '/category/sub/:id',
         component: subCategory,
+      },
+      {
+        path: '/product/id',
+        component: Goods,
       },
     ],
   },

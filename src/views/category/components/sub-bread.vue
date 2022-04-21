@@ -16,7 +16,7 @@
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
-import user from '@/store/modules/user';
+
 export default {
   name: 'SubBread',
   setup() {
