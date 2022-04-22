@@ -20,8 +20,20 @@
         </div>
         <div class="spec"><GoodsName :goods="goods" /></div>
       </div>
+      <!-- 名字区组件 -->
+      <GoodsName :goods="goods" />
+      <!-- 规格组件 -->
+      <GoodsSku :goods="goods" @change="changeSku" />
+
+      <!-- 数量 -->
+      <XtxNumbox label="数量" v-model="num" :max="goods.inventory" />
+      <!-- 按钮 -->
+      +<XtxButton type="primary" style="margin-top: 20px">加入购物车</XtxButton>
+      <!-- 按钮 -->
+      <GoodsTabs :goods="goods" />
+
       <!-- 商品推荐 -->
-      <GoodsRelevant />
+      <GoodsRelevant :goodsId="goods.id" />
       <!-- 商品详情 -->
       <div class="goods-footer">
         <div class="goods-article">
@@ -31,7 +43,10 @@
           <div class="goods-warn"></div>
         </div>
         <!-- 24热榜+专题推荐 -->
-        <div class="goods-aside"></div>
+        <div class="goods-aside">
+          <GoodsHot :goodsId="goods.id" :type="1" />
+          <GoodsHot :goodsId="goods.id" :type="2" />
+        </div>
       </div>
     </div>
   </div>
@@ -45,15 +60,47 @@ import { findGoods } from '@/api/product';
 import { useRoute } from 'vue-router';
 import GoodsSales from './components/goods-sales';
 import GoodsName from './components/goods-name';
+import GoodsTabs from './components/goods-tabs';
+import GoodsHot from './components/goods-tabs';
 
 export default {
   name: 'XtxGoodsPage',
-  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName },
+  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku, GoodsTabs, GoodsHot },
   setup() {
+    provide('goods', goods);
+
+    const num = ref(1);
+
     const goods = useGoods();
-    return { goods };
+    // sku改变时候触发
+    const changeSku = sku => {
+      if (sku.skuId) {
+        goods.value.price = sku.price;
+        goods.value.oldPrice = sku.oldPrice;
+        goods.value.inventory = sku.inventory;
+      }
+    };
+    return { goods, changeSku, num };
   },
 };
+
+// //  处理后台数据不规范，规格属性顺序和sku属性顺序不一致问题
+// findGoods('1369155859933827074').then(resolve => {
+//   // const sortSpecs = []
+//   // result.skus[0].specs.forEach(spec => {
+//   //   sortSpecs.push(result.specs.find(item => item.name === spec.name))
+//   // })
+//   // result.specs = sortSpecs
+//   result.skus.forEach(sku => {
+//     const sortSpecs = [];
+//     result.specs.forEach(spec => {
+//       sortSpecs.push(sku.specs.find(item => item.name === specs.name));
+//     });
+//     sku.specs = sortSpecs;
+//   });
+//   goods.value = result;
+// });
+
 // 获取商品详情
 const useGoods = () => {
   // 出现路由地址商品ID发生变化，但是不会重新初始化组件

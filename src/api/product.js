@@ -8,3 +8,4 @@ import request from '@/utils/request';
 export const findGoods = id => {
   return require('/goods', 'get', { id });
 };
+
