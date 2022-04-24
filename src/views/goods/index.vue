@@ -40,13 +40,19 @@
           <!-- 商品+评价 -->
           <div class="goods-tabs"></div>
           <!-- 注意事项 -->
-          <div class="goods-warn"></div>
+          <GoodsWarn />
         </div>
         <!-- 24热榜+专题推荐 -->
         <div class="goods-aside">
           <GoodsHot :goodsId="goods.id" :type="1" />
           <GoodsHot :goodsId="goods.id" :type="2" />
         </div>
+        <!-- 分页 -->
+        <XtxPagination
+          @current-change="changePager"
+          :total="total"
+          :current-page="reqParams.page"
+        />
       </div>
     </div>
   </div>
@@ -62,10 +68,20 @@ import GoodsSales from './components/goods-sales';
 import GoodsName from './components/goods-name';
 import GoodsTabs from './components/goods-tabs';
 import GoodsHot from './components/goods-tabs';
+import GoodsWarn from './components/goods-warn';
 
 export default {
   name: 'XtxGoodsPage',
-  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku, GoodsTabs, GoodsHot },
+  components: {
+    GoodsRelevant,
+    GoodsWarn,
+    GoodsImage,
+    GoodsSales,
+    GoodsName,
+    GoodsSku,
+    GoodsTabs,
+    GoodsHot,
+  },
   setup() {
     provide('goods', goods);
 
