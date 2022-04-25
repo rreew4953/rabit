@@ -7,6 +7,8 @@ const Home = () => import('@/views/home/index.vue');
 const Goods = () => {
   import('@/views/goods/index.vue');
 };
+const login = () => import('@/views/login/index.vue');
+const LoginCallback = () => import('@/views/login/callback.vue')
 
 //  路由规则
 const routes = [
@@ -33,6 +35,8 @@ const routes = [
       },
     ],
   },
+  { path: '/login', component: Login },
+  { path: '/login/callback', component: LoginCallback }
 ];
 
 const router = createRouter({

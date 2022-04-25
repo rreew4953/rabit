@@ -32,7 +32,6 @@ export default {
   setup() {
     const currImage = ref(null);
 
-
     //
 
     return { currImage };

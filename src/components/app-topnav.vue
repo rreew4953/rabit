@@ -4,12 +4,16 @@
       <ul>
         <template v-if="profile.token">
           <li>
-            <a href="javascript:;"><i class="iconfont icon-user"></i>{{ profile.account }} </a>
+            <a href="javascript:;"
+              ><i class="iconfont icon-user"></i>
+              {{ profile.account }}
+            </a>
           </li>
-          <li><a href="javascript:;">退出登录</a></li>
+          <li><a @click="logout()" href="javascript:;">退出登录</a></li>
         </template>
         <template v-else>
-          <li><a href="javascript:;">请先登录</a></li>
+          <li><RouterLink to="/login">请先登录</RouterLink></li>
+
           <li><a href="javascript:;">免费注册</a></li>
         </template>
 
@@ -25,18 +29,25 @@
   </nav>
 </template>
 <script>
-import { useStore } from 'vuex';
 import { computed } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
 export default {
   name: 'AppTopnav',
   setup() {
-    //  异步请求 需要查询token  需要先去 store 里找
+    // 获取用户的登录信息才能控制切换导航菜单
     const store = useStore();
-    // 使用 vuex 中的 state 需要设置计算属性  才会有响应式
+    // 使用vuex中的state需要设置计算属性，否则不是响应式
     const profile = computed(() => {
       return store.state.user.profile;
     });
-    return { profile };
+    const router = userRouter();
+    const logout = () => {
+      store.commit('user/setUser', {});
+      router.push('login');
+    };
+    return { profile, logout };
   },
 };
 </script>
