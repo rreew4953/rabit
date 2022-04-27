@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import './mock'
+import './mock';
 //  引入css normalize 包
 import 'normalize.css';
 import '@/assets/styles/common.less';

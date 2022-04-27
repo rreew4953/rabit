@@ -17,6 +17,8 @@
 import AppTopnav from '@/components/app-topnav.vue';
 import AppHeader from '@/components/app-header.vue';
 import AppFooter from '@/components/app-footer.vue';
+import AppMemberAside from '@/components/app-member-aside';
+
 import useStore from 'vuex';
 export default {
   name: 'Layout',
@@ -24,6 +26,7 @@ export default {
     AppTopnav,
     AppHeader,
     AppFooter,
+    AppMemberAside,
   },
   //  获取分类数据
   setup() {
@@ -36,5 +39,12 @@ export default {
 <style lang="less" scoped>
 .app-body {
   min-height: 600px;
+  .container {
+    display: flex;
+    padding-top: 20px;
+    .article {
+      width: 1000px;
+    }
+  }
 }
 </style>

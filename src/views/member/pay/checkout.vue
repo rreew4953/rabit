@@ -134,6 +134,24 @@ export default {
       router.push({ path: '/member/pay', query: { id: data.result.id } });
     };
 
+    // 再次购买结算
+    const route = useRoute();
+    if (route.query.orderId) {
+      // 再次购买结算
+      findOrderRepurchase(route.query.orderId).then(data => {
+        checkoutInfo.value = data.result;
+        // 设置订单商品数据
+        order.goods = data.result.goods.map(({ skuId, count }) => ({ skuId, count }));
+      });
+    } else {
+      // 购物车结算
+      findOrderPre().then(data => {
+        checkoutInfo.value = data.result;
+        // 设置订单商品数据
+        order.goods = data.result.goods.map(({ skuId, count }) => ({ skuId, count }));
+      });
+    }
+
     return { checkoutInfo, changeAddress, submitOrder };
   },
 };

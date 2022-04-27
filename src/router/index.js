@@ -12,6 +12,9 @@ const login = () => import('@/views/login/index.vue');
 const LoginCallback = () => import('@/views/login/callback.vue');
 const PayCheckout = () => import('@/views/member/pay/checkout');
 const PayIndex = () => import('@/views/member/pay/index');
+const MemberLayout = () => import('@/views/member/Layout');
+const MemberHome = () => import('@/views/member/home');
+const MemberOrder = () => import('@/views/member/order');
 
 //  路由规则
 const routes = [
@@ -43,6 +46,20 @@ const routes = [
   { path: '/cart', component: Cart },
   { path: '/member/checkout', component: PayCheckout },
   { path: '/member/pay', component: PayIndex },
+  {
+    path: '/member',
+    component: MemberLayout,
+    children: [{ path: '/member', component: MemberHome }],
+  },
+  {
+    path: '/member/order/',
+    // vue3.0 需要有嵌套关系才能模糊匹配
+    component: { render: () => h(<RouterView />) },
+    children: [
+      { path: '', component: MemberOrder },
+      { path: ':id', component: MemberOrderDetail },
+    ],
+  },
 ];
 
 // 前置导航守卫
