@@ -176,6 +176,15 @@ export default {
             // 实现和之前登录一样的逻辑
             // 1. 存储用户信息
             const { id, account, avatar, mobile, nickname, token } = data.result;
+
+            // 合并购物车操作
+            store.dispatch('cart/mergeLocalCart').then(() => {
+              // 2. 提示
+              Message({ type: 'success', text: '完善信息成功' });
+              // 3. 跳转
+              router.push(store.state.user.redirectUrl || '/');
+            });
+
             store.commit('user/setUser', { id, account, avatar, mobile, nickname, token });
             // 2. 跳转到来源页或者首页
             router.push(store.state.user.redirectUrl);

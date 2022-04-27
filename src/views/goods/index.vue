@@ -61,7 +61,7 @@
 <script>
 import GoodsRelevant from './components/goods-relevant';
 import GoodsImage from './components/goods-image.vue';
-import { nextTick, ref, watch } from 'vue';
+import { getCurrentInstance, nextTick, ref, watch } from 'vue';
 import { findGoods } from '@/api/product';
 import { useRoute } from 'vue-router';
 import GoodsSales from './components/goods-sales';
@@ -94,9 +94,47 @@ export default {
         goods.value.price = sku.price;
         goods.value.oldPrice = sku.oldPrice;
         goods.value.inventory = sku.inventory;
+        //  购物车 存储sku 可能为空
+        currSku.value = sku;
+      } else {
+        //  购物车
+        currSku.value = null;
       }
     };
-    return { goods, changeSku, num };
+    // 选择的数量
+    const num = ref(1);
+    // 加入购物车逻辑
+    const currSku = ref(null);
+    const instance = getCurrentInstance();
+    const store = useStore();
+    const insertCart = () => {
+      if (!currSku.value) {
+        return instance.proxy.$message('请选择商品规格');
+      }
+      if (num.value > goods.inventory) {
+        return instance.proxy.$message('库存不足');
+      }
+      store
+        .dispatch('cart/insertCart', {
+          id: goods.value.id,
+          skuId: currSku.value.skuId,
+          name: goods.value.name,
+          picture: goods.value.mainPictures[0],
+          price: currSku.value.price,
+          nowPrice: currSku.value.price,
+          count: num.value,
+          attrsText: currSku.value.specsText,
+          selected: true,
+          isEffective: true,
+          stock: currSku.value.inventory,
+        })
+        .then(() => {
+          instance.proxy.$message('加入购物车成功', 'success');
+        });
+    };
+
+    //
+    return { goods, changeSku, num, insertCart };
   },
 };
 

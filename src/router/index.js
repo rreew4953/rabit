@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import topCategory from '@/views/category/index.vue';
 import subCategory from '@/views/category/sub.vue';
+import store from '@/store';
 
 const Layout = () => import('@/views/Layout.vue');
 const Home = () => import('@/views/home/index.vue');
@@ -8,7 +9,9 @@ const Goods = () => {
   import('@/views/goods/index.vue');
 };
 const login = () => import('@/views/login/index.vue');
-const LoginCallback = () => import('@/views/login/callback.vue')
+const LoginCallback = () => import('@/views/login/callback.vue');
+const PayCheckout = () => import('@/views/member/pay/checkout');
+const PayIndex = () => import('@/views/member/pay/index');
 
 //  路由规则
 const routes = [
@@ -35,9 +38,25 @@ const routes = [
       },
     ],
   },
-  { path: '/login', component: Login },
-  { path: '/login/callback', component: LoginCallback }
+  { path: '/login', component: login },
+  { path: '/login/callback', component: LoginCallback },
+  { path: '/cart', component: Cart },
+  { path: '/member/checkout', component: PayCheckout },
+  { path: '/member/pay', component: PayIndex },
 ];
+
+// 前置导航守卫
+router.beforeEach((to, from, next) => {
+  //to and from are Route Object,next() must be called to resolve the hook}
+  // 用户信息
+  const { token } = store.state.user.profile;
+  // 跳转去member开头的地址却没有登录
+  if (to.path.startsWith('/member') && !token) {
+    //  return next('/login?redirectUrl=' + encodeURIcomponent(to.fullpath))
+    next({ path: '/login', query: { redirectUrl: to.fullPath } });
+  }
+  next();
+});
 
 const router = createRouter({
   //  使用路由模式  哈希  改成历史模式需要 导入

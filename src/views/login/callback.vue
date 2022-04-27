@@ -61,6 +61,15 @@ export default {
             // 1. 存储用户信息
             const { id, account, avatar, mobile, nickname, token } = data.result;
             store.commit('user/setUser', { id, account, avatar, mobile, nickname, token });
+
+            // 合并购物车操作
+            store.dispatch('cart/mergeLocalCart').then(() => {
+              // 2. 提示
+              Message({ type: 'success', text: '完善信息成功' });
+              // 3. 跳转
+              router.push(store.state.user.redirectUrl || '/');
+            });
+
             // 2. 跳转到来源页或者首页
             router.push(store.state.user.redirectUrl);
             // 3. 成功提示

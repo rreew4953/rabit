@@ -1,7 +1,8 @@
 <template>
   <div class="xtx-city" ref="target">
     <div class="select" @click="toggleDialog" :class="{ active }">
-      <span class="placeholder">请选择配送地址</span>
+      <span v-if="!fullName" class="placeholder">{{ placeholder }}</span>
+
       <span class="value"></span>
       <i class="iconfont icon-angle-down"></i>
     </div>
@@ -26,6 +27,16 @@ import { onClickOutside } from '@vueuse/core';
 
 export default {
   name: 'XtxCity',
+  props: {
+    placeholder: {
+      type: String,
+      default: '请选择配送地址',
+    },
+    placeholder: {
+      type: String,
+      default: '请选择配送地区',
+    },
+  },
   setup() {
     // 控制展开收起,默认收起
     const active = ref(false);

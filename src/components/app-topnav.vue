@@ -44,8 +44,15 @@ export default {
     });
     const router = userRouter();
     const logout = () => {
+      // 退出登录
+      // 1. 清空本地存储信息和vuex的用户信息
       store.commit('user/setUser', {});
-      router.push('login');
+
+      // 清空购物车
+      store.commit('cart/setCartList', []);
+
+      // 2. 跳转登录
+      router.push('/login');
     };
     return { profile, logout };
   },

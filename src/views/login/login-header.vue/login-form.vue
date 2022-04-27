@@ -243,7 +243,6 @@ export default {
             // 3. 完成手机号短信验证码登录逻辑
             data = await userMobileLogin(form)
         }
-
       } catch (e) {
 // 失败
             Message({ type: 'error', text: e.response.data.message || '登录失败' })
@@ -253,6 +252,16 @@ export default {
 
             const { id, account, nickName, avatar, token, mobile } = data.result;
             store.commit('user/setUser', { id, account, nickname, avatar, token, mobile });
+
+            // 合并购物车操作
+            store.dispatch('cart/mergeLocalCart').then(()=>{
+              // 2. 提示
+          Message({ type: 'success', text: '登录成功' })
+          // 3. 跳转
+          router.push(route.query.redirectUrl || '/')
+        })
+
+
             // 2. 提示
             Message({ type: 'success', text: '登录成功' });
             // 3. 跳转
